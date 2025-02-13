@@ -1,0 +1,76 @@
+<section>
+  <div class="grid grid-cols-1 md:grid-cols-[65%_minmax(0,1fr)] gap-5 mt-5">
+    <div class="col">
+      <div class="title flex justify-between items-center">
+        <div class="flex items-center gap-4">
+          <h1 class="text-3xl font-bold text-green-600">Cart</h1>
+          <span class="text-sm"> <span class="text-red-600 font-medium"> {{cartProductsCount}} </span>items</span>
+        </div>
+        <button (click)="clearCart()" class="clear-cart p-2 rounded-lg bg-green-600 text-white">Clear Cart</button>
+      </div>
+      @for (product of cartProducts.products; track product.product.id ) {
+        <div class="product flex items-center gap-5 rounded-lg border border-[#ccc] mt-4 overflow-hidden">
+          <div class="image">
+            <img [src]="product.product.imageCover" class="w-full h-[100px] object-contain" [alt]="product.product.title" />
+          </div>
+          <div class="content flex flex-1 justify-between items-center p-4">
+            <div class="">
+              <h2 class="text-green-600"> {{product.product.title}} </h2>
+              <div class="flex items-center gap-5">
+                <div class="btns bg-[#f6f6f6] border border-black rounded-lg p-1 w-[120px] flex justify-around mt-3">
+                  <button (click)="updateQuantity(product.product.id, product.count - 1)" ><i class="fa-solid fa-minus"></i></button>
+                  <span> {{product.count}} </span>
+                  <button (click)="updateQuantity(product.product.id, product.count + 1)"><i class="fa-solid fa-plus"></i></button>
+                </div>
+                <button (click)="removeProduct(product.product.id)"><i class="fa-solid fa-trash text-green-600 text-xl mt-3"></i></button>
+              </div>
+            </div>
+            <span class="price text-green-600"> {{product.price}} EGP</span>
+          </div>
+        </div>
+      }
+      <!-- @if (cartProducts) {
+        <div class="flex items-center flex-col gap-5 justify-center h-full">
+          <p class="text-lg text-red-600">there is no items in your cart</p>
+          <button routerLink="/products" class="p-2 rounded-lg bg-green-600 text-white">Go to Products</button>
+        </div>
+      } -->
+    </div>
+    <div class="col bg-[#f6f6f6] p-5 rounded-lg h-[400px]">
+      <h3 class="text-2xl text-green-600 mb-2">Order Summary</h3>
+      <div class="top pb-4 border-b border-b-[#ccc]">
+        <div class="flex justify-between items-center mb-3">
+          <strong>price</strong>
+          <span> {{cartProducts.totalCartPrice}} EGP</span>
+        </div>
+        <div class="flex justify-between items-center mb-3">
+          <strong>Discount</strong>
+          <span> {{calculateDiscount()}} EGP</span>
+        </div>
+        <div class="flex justify-between items-center mb-3">
+          <strong>Shipping</strong>
+          <span class="text-green-600">free</span>
+        </div>
+        <div class="flex justify-between items-center mb-3">
+          <strong>Coupon Applied</strong>
+          <span>0.00 EGP</span>
+        </div>
+      </div>
+      <div class="middle pt-4">
+        <div class="flex justify-between items-center mb-3">
+          <strong>Total</strong>
+          <span> {{calculateTotal()}} EGP</span>
+        </div>
+        <div class="flex justify-between items-center mb-3">
+          <strong>Estmaited Delivery by</strong>
+          <strong> {{date | date}} </strong>
+        </div>
+      </div>
+      <select (change)="paymentMethod($event)" class="p-2 w-full rounded-lg border-none outline-none shadow-none appearance-none" >
+        <option class="p-1 mb-2" value="online" selected>online payment</option>
+        <option class="p-1 mb-2" value="cash">cash payment</option>
+      </select>
+      <button [routerLink]="['/checkout', cartProducts._id]" [queryParams]="{'payment': payment}" class="p-[10px] bg-green-600 text-white transition-all duration-700 hover:bg-green-700 rounded-[25px] w-full mt-4">Proceed to Checkout</button>
+    </div>
+  </div>
+</section>
