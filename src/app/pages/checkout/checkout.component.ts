@@ -1,9 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CartService } from '../../core/services/cart/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-checkout',
@@ -11,11 +12,12 @@ import { ErrorMessageComponent } from "../../shared/components/ui/error-message/
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })
-export class CheckoutComponent implements OnInit {
+export class CheckoutComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   errorMsg: string = '';
   currentId: string = '';
   payment: string = '';
+    subscriptions: Subscription[] = [];
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
   private readonly toastrService = inject(ToastrService);
@@ -42,7 +44,7 @@ export class CheckoutComponent implements OnInit {
   checkoutOnline(): void {
     if (this.checkoutForm.valid) {
       this.loading = true;
-      this.cartService.checkoutOnline(this.currentId, this.checkoutForm.value).subscribe({
+      this.subscriptions.push(this.cartService.checkoutOnline(this.currentId, this.checkoutForm.value).subscribe({
         next: (res) => {
           if (res.status === 'success') {
             this.toastrService.success('order has been done!');
@@ -54,7 +56,7 @@ export class CheckoutComponent implements OnInit {
           this.loading = false;
           this.errorMsg = err;
         }
-      })
+      }))
     } else {
       this.checkoutForm.markAllAsTouched();
     }
@@ -62,7 +64,7 @@ export class CheckoutComponent implements OnInit {
   checkoutCash(): void {
     if (this.checkoutForm.valid) {
       this.loading = true;
-      this.cartService.checkoutCash(this.currentId, this.checkoutForm.value).subscribe({
+      this.subscriptions.push(this.cartService.checkoutCash(this.currentId, this.checkoutForm.value).subscribe({
         next: (res) => {
           if (res.status === 'success') {
             this.loading = false;
@@ -74,7 +76,7 @@ export class CheckoutComponent implements OnInit {
           this.loading = false;
           this.errorMsg = err;
         }
-      })
+      }))
     } else {
       this.checkoutForm.markAllAsTouched();
     }
@@ -87,5 +89,8 @@ export class CheckoutComponent implements OnInit {
   }
   get city() {
     return this.checkoutForm.get('city');
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

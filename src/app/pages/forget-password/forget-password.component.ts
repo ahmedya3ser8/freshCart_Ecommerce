@@ -1,9 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-forget-password',
@@ -11,10 +12,11 @@ import { ErrorMessageComponent } from "../../shared/components/ui/error-message/
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.scss'
 })
-export class ForgetPasswordComponent implements OnInit {
+export class ForgetPasswordComponent implements OnInit, OnDestroy {
   errorMsg: string = '';
   step: number = 1;
   toggleInput: boolean = false;
+  subscriptions: Subscription[] = [];
   verifyEmailForm!: FormGroup;
   verifyCodeForm!: FormGroup;
   resetPasswordForm!: FormGroup;
@@ -38,7 +40,7 @@ export class ForgetPasswordComponent implements OnInit {
       const emailValue = this.verifyEmail?.value;
       this.resetEmail?.patchValue(emailValue);
       this.errorMsg = '';
-      this.authService.verifyEmail(this.verifyEmailForm.value).subscribe({
+      this.subscriptions.push(this.authService.verifyEmail(this.verifyEmailForm.value).subscribe({
         next: (res) => {
           if (res.statusMsg === 'success') {
             this.step = 2;
@@ -47,7 +49,7 @@ export class ForgetPasswordComponent implements OnInit {
         error: (err: HttpErrorResponse) => {
           this.errorMsg = err.error.message.split(" ", 9).join(" ");
         }
-      })
+      }))
     } else {
       this.verifyEmailForm.markAllAsTouched();
     }
@@ -55,7 +57,7 @@ export class ForgetPasswordComponent implements OnInit {
   submitVerifyCode() {
     if (this.verifyCodeForm.valid) {
       this.errorMsg = '';
-      this.authService.verifyCode(this.verifyCodeForm.value).subscribe({
+      this.subscriptions.push(this.authService.verifyCode(this.verifyCodeForm.value).subscribe({
         next: (res) => {
           if (res.status === 'Success') {
             this.step = 3;
@@ -64,7 +66,7 @@ export class ForgetPasswordComponent implements OnInit {
         error: (err: HttpErrorResponse) => {
           this.errorMsg = err.error.message;
         }
-      })
+      }))
     } else {
       this.verifyCodeForm.markAllAsTouched();
     }
@@ -72,13 +74,13 @@ export class ForgetPasswordComponent implements OnInit {
   submitResetPassword() {
     if (this.resetPasswordForm.valid) {
       this.errorMsg = '';
-      this.authService.resetPassword(this.resetPasswordForm.value).subscribe({
+      this.subscriptions.push(this.authService.resetPassword(this.resetPasswordForm.value).subscribe({
         next: (res) => {
           localStorage.setItem("token", res.token);
           this.authService.getUserData();
           this.router.navigateByUrl('/home');
         }
-      })
+      }))
     } else {
       this.resetPasswordForm.markAllAsTouched();
     }
@@ -97,5 +99,8 @@ export class ForgetPasswordComponent implements OnInit {
   }
   get newPassword() {
     return this.resetPasswordForm.get('newPassword');
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

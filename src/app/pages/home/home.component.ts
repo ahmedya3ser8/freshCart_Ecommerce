@@ -6,10 +6,11 @@ import { IProduct } from '../../shared/interfaces/iproduct';
 import { CategoriesService } from '../../core/services/categories/categories.service';
 import { ProductsService } from '../../core/services/products/products.service';
 import { ProductItemComponent } from "../../shared/components/ui/product-item/product-item.component";
+import { CategoryItemComponent } from "../../shared/components/ui/category-item/category-item.component";
 
 @Component({
   selector: 'app-home',
-  imports: [CarouselModule, ProductItemComponent],
+  imports: [CarouselModule, ProductItemComponent, CategoryItemComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
@@ -22,6 +23,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     loop: true,
     margin: 15,
     mouseDrag: true,
+    rtl: true,
     touchDrag: true,
     dots: false,
     autoplay: true,
@@ -49,6 +51,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     loop: true,
     mouseDrag: true,
     touchDrag: true,
+    rtl: true,
     dots: false,
     autoplay: true,
     autoplayTimeout: 3000,
@@ -78,8 +81,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     }))
   }
   ngOnDestroy(): void {
-    this.subscriptions.forEach(subscription => {
-      subscription.unsubscribe();
-    })
+    this.subscriptions.forEach(subscription => subscription.unsubscribe());
   }
 }

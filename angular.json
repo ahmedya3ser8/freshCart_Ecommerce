@@ -17,6 +17,12 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "fileReplacements": [
+              {
+                "replace": "./src/app/core/environments/environment.ts",
+                "with": "./src/app/core/environments/environment.prod.ts"
+              }
+            ],
             "outputPath": "dist/ecommerce",
             "index": "src/index.html",
             "browser": "src/main.ts",

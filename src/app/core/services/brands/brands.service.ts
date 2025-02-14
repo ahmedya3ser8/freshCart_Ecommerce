@@ -6,13 +6,10 @@ import { API_BASE_URL } from '../../../token/api-token';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsService {
+export class BrandsService {
   private readonly baseUrl = inject(API_BASE_URL);
   constructor(private httpClient:HttpClient) { }
-  getAllProducts(): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/api/v1/products`);
-  }
-  getProductById(id: string): Observable<any> {
-    return this.httpClient.get(`${this.baseUrl}/api/v1/products/${id}`);
+  getAllBrands(): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/api/v1/brands`);
   }
 }

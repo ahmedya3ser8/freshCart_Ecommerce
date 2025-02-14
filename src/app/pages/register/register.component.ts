@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -11,10 +12,11 @@ import { ErrorMessageComponent } from "../../shared/components/ui/error-message/
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   errorMsg: string = '';
   toggleInput: boolean = false;
+  subscription: Subscription = new Subscription();
   registerForm!: FormGroup;
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -32,7 +34,7 @@ export class RegisterComponent implements OnInit {
     console.log(this.registerForm);
     if (this.registerForm.valid) {
       this.loading = true;
-      this.authService.register(this.registerForm.value).subscribe({
+      this.subscription = this.authService.register(this.registerForm.value).subscribe({
         next: (res) => {
           this.loading = false;
           if(res.message === 'success') {
@@ -74,5 +76,8 @@ export class RegisterComponent implements OnInit {
   }
   get phone() {
     return this.registerForm.get('phone');
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

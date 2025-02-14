@@ -1,9 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -11,10 +12,11 @@ import { ErrorMessageComponent } from "../../shared/components/ui/error-message/
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit,OnDestroy {
   loading: boolean = false;
   errorMsg: string = '';
   toggleInput: boolean = false;
+  subscription: Subscription = new Subscription();
   loginForm!: FormGroup;
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
@@ -28,7 +30,7 @@ export class LoginComponent implements OnInit {
   login() {
     if (this.loginForm.valid) {
       this.loading = true;
-      this.authService.login(this.loginForm.value).subscribe({
+      this.subscription = this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
           this.loading = false;
           if(res.message === 'success') {
@@ -37,9 +39,9 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl(`/home`);
           }
         },
-        error: (err: HttpErrorResponse) => {
+        error: (err: any) => {
           this.loading = false;
-          this.errorMsg = err.error.message;
+          this.errorMsg = err;
         }
       })
     } else {
@@ -54,5 +56,8 @@ export class LoginComponent implements OnInit {
   }
   get password() {
     return this.loginForm.get('password');
+  }
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

@@ -21,10 +21,7 @@
   <owl-carousel-o [options]="customCategoriesOptions">
     @for (category of categories; track category._id) {
       <ng-template carouselSlide>
-        <div class="border border-green-500 p-2 rounded-2xl overflow-hidden">
-          <img [src]="category.image" class="h-[150px] object-contain" [alt]="category.name" />
-          <h3 class="text-green-600 text-xl text-center my-3 mx-2"> {{category.name}} </h3>
-        </div>
+        <app-category-item [category]="category" ></app-category-item>
       </ng-template>
     }
   </owl-carousel-o>

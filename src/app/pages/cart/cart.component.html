@@ -9,7 +9,7 @@
         <button (click)="clearCart()" class="clear-cart p-2 rounded-lg bg-green-600 text-white">Clear Cart</button>
       </div>
       @for (product of cartProducts.products; track product.product.id ) {
-        <div class="product flex items-center gap-5 rounded-lg border border-[#ccc] mt-4 overflow-hidden">
+        <div class="product flex items-center md:gap-5 rounded-lg border border-[#ccc] mt-4 overflow-hidden">
           <div class="image">
             <img [src]="product.product.imageCover" class="w-full h-[100px] object-contain" [alt]="product.product.title" />
           </div>
@@ -29,12 +29,6 @@
           </div>
         </div>
       }
-      <!-- @if (cartProducts) {
-        <div class="flex items-center flex-col gap-5 justify-center h-full">
-          <p class="text-lg text-red-600">there is no items in your cart</p>
-          <button routerLink="/products" class="p-2 rounded-lg bg-green-600 text-white">Go to Products</button>
-        </div>
-      } -->
     </div>
     <div class="col bg-[#f6f6f6] p-5 rounded-lg h-[400px]">
       <h3 class="text-2xl text-green-600 mb-2">Order Summary</h3>

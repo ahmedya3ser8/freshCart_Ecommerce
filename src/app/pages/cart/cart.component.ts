@@ -1,10 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { CartService } from '../../core/services/cart/cart.service';
 import { ICart } from '../../shared/interfaces/icart';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import Swal from 'sweetalert2';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -12,40 +13,35 @@ import Swal from 'sweetalert2';
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.scss'
 })
-export class CartComponent implements OnInit {
+export class CartComponent implements OnInit, OnDestroy {
   cartProducts: ICart = <ICart>{};
   cartProductsCount: number = 0;
   dicount: number = 10;
   payment: string = 'online';
   date: Date = new Date();
+  subscriptions: Subscription[] = [];
   private readonly cartService = inject(CartService);
   private readonly toastrService = inject(ToastrService);
   ngOnInit(): void {
     this.getAllCartProducts();
   }
   getAllCartProducts(): void {
-    this.cartService.getAllCartProducts().subscribe({
+    this.subscriptions.push(this.cartService.getAllCartProducts().subscribe({
       next: (res) => {
         this.cartProductsCount = res.numOfCartItems;
         this.cartProducts = res.data;
-      },
-      error: (err) => {
-        console.log(err);
       }
-    })
+    }))
   }
   updateQuantity(id: string, quantity: number): void {
-    this.cartService.updateCartProductQuantity(id, quantity).subscribe({
+    this.subscriptions.push(this.cartService.updateCartProductQuantity(id, quantity).subscribe({
       next: (res) => {
         if (res.status === 'success') {
           this.cartProducts = res.data;
           this.toastrService.success('quantity updated successfully');
         }
-      },
-      error: (err) => {
-        console.log(err);
       }
-    })
+    }))
   }
   removeProduct(id: string): void {
     Swal.fire({
@@ -58,7 +54,7 @@ export class CartComponent implements OnInit {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.cartService.removeProductFromCart(id).subscribe({
+        this.subscriptions.push(this.cartService.removeProductFromCart(id).subscribe({
           next: (res) => {
             if (res.status === 'success') {
               this.cartProductsCount = res.numOfCartItems;
@@ -69,11 +65,8 @@ export class CartComponent implements OnInit {
                 icon: "success"
               });
             }
-          },
-          error: (err) => {
-            console.log(err);
           }
-        })
+        }))
       }
     });
   }
@@ -88,7 +81,7 @@ export class CartComponent implements OnInit {
       confirmButtonText: "Yes, delete it!"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.cartService.clearCart().subscribe({
+        this.subscriptions.push(this.cartService.clearCart().subscribe({
           next: (res) => {
             if (res.message === 'success') {
               this.cartProductsCount = 0;
@@ -99,11 +92,8 @@ export class CartComponent implements OnInit {
                 icon: "success"
               });
             }
-          },
-          error: (err) => {
-            console.log(err);
           }
-        })
+        }))
       }
     });
   }
@@ -116,5 +106,8 @@ export class CartComponent implements OnInit {
   }
   calculateTotal() {
     return (this.cartProducts.totalCartPrice - (this.cartProducts.totalCartPrice / 100) * this.dicount).toFixed(2);
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }

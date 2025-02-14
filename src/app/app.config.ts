@@ -3,12 +3,20 @@ import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angu
 import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { headersInterceptor } from './core/interceptors/headers/headers.interceptor';
 import { errorsInterceptor } from './core/interceptors/errors/errors.interceptor';
 import { NgxSpinnerService } from "ngx-spinner";
 import { loadingInterceptor } from './core/interceptors/loading/loading.interceptor';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { API_BASE_URL } from './token/api-token';
+import { environment } from './core/environments/environment';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './i18n/', '.json');
+}
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,6 +30,20 @@ export const appConfig: ApplicationConfig = {
       timeOut: 2000,
       progressBar: true
     }),
-    importProvidersFrom([NgxSpinnerService])
+    importProvidersFrom(
+    [
+        NgxSpinnerService,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+          }
+        })
+    ]),
+    {
+      provide: API_BASE_URL,
+      useValue: environment.baseUrl
+    }
   ]
 };
