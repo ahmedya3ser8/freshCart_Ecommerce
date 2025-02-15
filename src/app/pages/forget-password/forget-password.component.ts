@@ -5,10 +5,11 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
 import { Subscription } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-forget-password',
-  imports: [ReactiveFormsModule, ErrorMessageComponent],
+  imports: [ReactiveFormsModule, ErrorMessageComponent, TranslatePipe],
   templateUrl: './forget-password.component.html',
   styleUrl: './forget-password.component.scss'
 })
@@ -87,6 +88,13 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
   }
   toggle(): void {
     this.toggleInput = !this.toggleInput;
+  }
+  selectedLang() {
+    if (localStorage.getItem('lang') === 'en') {
+      return true;
+    } else {
+      return false;
+    }
   }
   get verifyEmail() {
     return this.verifyEmailForm.get('email');

@@ -5,10 +5,11 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
 import { Subscription } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, RouterLink, ErrorMessageComponent],
+  imports: [ReactiveFormsModule, RouterLink, ErrorMessageComponent, TranslatePipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -56,6 +57,13 @@ export class LoginComponent implements OnInit,OnDestroy {
   }
   get password() {
     return this.loginForm.get('password');
+  }
+  selectedLang() {
+    if (localStorage.getItem('lang') === 'en') {
+      return true;
+    } else {
+      return false;
+    }
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

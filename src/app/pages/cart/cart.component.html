@@ -3,10 +3,10 @@
     <div class="col">
       <div class="title flex justify-between items-center">
         <div class="flex items-center gap-4">
-          <h1 class="text-3xl font-bold text-green-600">Cart</h1>
-          <span class="text-sm"> <span class="text-red-600 font-medium"> {{cartProductsCount}} </span>items</span>
+          <h1 class="text-3xl font-bold text-green-600"> {{"cartPage.cart" | translate }} </h1>
+          <span class="text-sm"> <span class="text-red-600 font-medium"> {{cartProductsCount}} </span>{{"cartPage.items" | translate }}</span>
         </div>
-        <button (click)="clearCart()" class="clear-cart p-2 rounded-lg bg-green-600 text-white">Clear Cart</button>
+        <button (click)="clearCart()" class="clear-cart p-2 rounded-lg bg-green-600 text-white">{{"cartPage.clearBtn" | translate }}</button>
       </div>
       @for (product of cartProducts.products; track product.product.id ) {
         <div class="product flex items-center md:gap-5 rounded-lg border border-[#ccc] mt-4 overflow-hidden">
@@ -25,46 +25,50 @@
                 <button (click)="removeProduct(product.product.id)"><i class="fa-solid fa-trash text-green-600 text-xl mt-3"></i></button>
               </div>
             </div>
-            <span class="price text-green-600"> {{product.price}} EGP</span>
+            <span class="price text-green-600"> {{product.price}} {{"cartPage.priceCode" | translate }}</span>
           </div>
+        </div>
+      } @empty {
+        <div class="flex justify-center items-center h-full">
+          <p class="text-red-600 text-2xl font-medium">{{"cartPage.cartEmpty" | translate }}</p>
         </div>
       }
     </div>
     <div class="col bg-[#f6f6f6] p-5 rounded-lg h-[400px]">
-      <h3 class="text-2xl text-green-600 mb-2">Order Summary</h3>
+      <h3 class="text-2xl text-green-600 mb-2">{{"cartPage.orderTitle" | translate }}</h3>
       <div class="top pb-4 border-b border-b-[#ccc]">
         <div class="flex justify-between items-center mb-3">
-          <strong>price</strong>
-          <span> {{cartProducts.totalCartPrice}} EGP</span>
+          <strong>{{"cartPage.price" | translate }}</strong>
+          <span> {{cartProducts.totalCartPrice}} {{"cartPage.priceCode" | translate }}</span>
         </div>
         <div class="flex justify-between items-center mb-3">
-          <strong>Discount</strong>
-          <span> {{calculateDiscount()}} EGP</span>
+          <strong>{{"cartPage.discount" | translate }}</strong>
+          <span> {{calculateDiscount()}} {{"cartPage.priceCode" | translate }}</span>
         </div>
         <div class="flex justify-between items-center mb-3">
-          <strong>Shipping</strong>
-          <span class="text-green-600">free</span>
+          <strong>{{"cartPage.shipping" | translate }}</strong>
+          <span class="text-green-600">{{"cartPage.free" | translate }}</span>
         </div>
         <div class="flex justify-between items-center mb-3">
-          <strong>Coupon Applied</strong>
-          <span>0.00 EGP</span>
+          <strong>{{"cartPage.couponApplied" | translate }}</strong>
+          <span>0.00 {{"cartPage.priceCode" | translate }}</span>
         </div>
       </div>
       <div class="middle pt-4">
         <div class="flex justify-between items-center mb-3">
-          <strong>Total</strong>
-          <span> {{calculateTotal()}} EGP</span>
+          <strong>{{"cartPage.total" | translate }}</strong>
+          <span> {{calculateTotal()}} {{"cartPage.priceCode" | translate }}</span>
         </div>
         <div class="flex justify-between items-center mb-3">
-          <strong>Estmaited Delivery by</strong>
+          <strong>{{"cartPage.estmaitedDelivery" | translate }}</strong>
           <strong> {{date | date}} </strong>
         </div>
       </div>
       <select (change)="paymentMethod($event)" class="p-2 w-full rounded-lg border-none outline-none shadow-none appearance-none" >
-        <option class="p-1 mb-2" value="online" selected>online payment</option>
-        <option class="p-1 mb-2" value="cash">cash payment</option>
+        <option class="p-1 mb-2" value="online" selected>{{"cartPage.online" | translate }}</option>
+        <option class="p-1 mb-2" value="cash">{{"cartPage.cash" | translate }}</option>
       </select>
-      <button [routerLink]="['/checkout', cartProducts._id]" [queryParams]="{'payment': payment}" class="p-[10px] bg-green-600 text-white transition-all duration-700 hover:bg-green-700 rounded-[25px] w-full mt-4">Proceed to Checkout</button>
+      <button [routerLink]="['/checkout', cartProducts._id]" [queryParams]="{'payment': payment}" class="p-[10px] bg-green-600 text-white transition-all duration-700 hover:bg-green-700 rounded-[25px] w-full mt-4">{{"cartPage.checkout" | translate }}</button>
     </div>
   </div>
 </section>

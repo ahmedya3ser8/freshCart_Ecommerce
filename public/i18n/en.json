@@ -4,6 +4,78 @@
     "products": "Products",
     "categories": "Categories",
     "brands": "Brands",
-    "logout": "Logout"
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register",
+    "ar": "ar",
+    "en": "en"
+  },
+  "footer": {
+    "title": "get the freshCart app",
+    "desc": "we will send you a link, open it on your phone to download the app",
+    "payments": "payments partners",
+    "delivers": "get delivers with freshCart",
+    "btn": "share app link"
+  },
+  "categories": {
+    "title": "Popular Categories"
+  },
+  "products": {
+    "title": "Popular Products",
+    "btn": "add to cart",
+    "price": "EGP"
+  },
+  "loginPage": {
+    "login": "Login",
+    "email": "Email",
+    "password": "Password",
+    "forgetPassword": "forget password?",
+    "desc": "you don't have an account?",
+    "register": "register"
+  },
+  "registerPage": {
+    "name": "Name",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "phone": "Phone",
+    "register": "Register",
+    "desc": "you have an account?",
+    "login": "login"
+  },
+  "forgetPasswordPage": {
+    "forgetPassword": "Forget Password",
+    "email": "Email",
+    "verifyEmail": "VerifyEmail",
+    "code": "Code",
+    "verifyCode": "VerifyCode",
+    "newPassword": "New Password",
+    "resetPassword": "Reset Password"
+  },
+  "cartPage": {
+    "cart": "Cart",
+    "items": "items",
+    "clearBtn": "Clear Cart",
+    "orderTitle": "Order Summary",
+    "price": "Price",
+    "priceCode": "EGP",
+    "discount": "Discount",
+    "shipping": "Shipping",
+    "couponApplied": "Coupon Applied",
+    "total": "Total",
+    "estmaitedDelivery": "Estmaited Delivery by",
+    "online": "online payment",
+    "cash": "cash payment",
+    "checkout": "Proceed to Checkout",
+    "free": "free",
+    "cartEmpty": "there are no items in your cart"
+  },
+  "checkoutPage": {
+    "checkoutPayments": "Checkout Payments",
+    "details": "Details",
+    "phone": "Phone",
+    "city": "City",
+    "online": "Checkout Online",
+    "cash": "Checkout Cash"
   }
 }

@@ -5,10 +5,11 @@ import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
 import { Subscription } from 'rxjs';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register',
-  imports: [ReactiveFormsModule, RouterLink, ErrorMessageComponent],
+  imports: [ReactiveFormsModule, RouterLink, ErrorMessageComponent, TranslatePipe],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
@@ -61,6 +62,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
   toggle(): void {
     this.toggleInput = !this.toggleInput;
+  }
+  selectedLang() {
+    if (localStorage.getItem('lang') === 'en') {
+      return true;
+    } else {
+      return false;
+    }
   }
   get name() {
     return this.registerForm.get('name');

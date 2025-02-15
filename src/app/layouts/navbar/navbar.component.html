@@ -49,24 +49,31 @@
         </li>
         @if (!isLogin) {
           <li>
-            <a routerLink="/register" routerLinkActive="active" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">Register</a>
+            <a routerLink="/register" routerLinkActive="active" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">{{'navbar.register' | translate}}</a>
           </li>
           <li>
-            <a routerLink="/login" routerLinkActive="active" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">Login</a>
+            <a routerLink="/login" routerLinkActive="active" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">{{'navbar.login' | translate}}</a>
           </li>
         } @else {
-          <li>
+          <li class="relative">
             <a routerLink="/cart" routerLinkActive="cart" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">
               <i class="fa-solid fa-cart-shopping"></i>
             </a>
+            <span class="absolute top-[-5px] right-[-1px] size-4 text-red-600">0</span>
+          </li>
+          <li class="relative">
+            <a routerLink="/wishlist" routerLinkActive="cart" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">
+              <i class="fa-solid fa-heart text-xl"></i>
+            </a>
+            <span class="absolute top-[-5px] right-[-1px] size-4 text-red-600">0</span>
           </li>
           <li>
             <a role="button" (click)="authService.logout()" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-sm"> {{'navbar.logout' | translate}} </a>
           </li>
         }
         <select (change)="changeLang($any($event.target).value)" class="border bg-gray-100 border-green-600 text-gray-400 text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block !py-1 !px-2 !bg-none">
-          <option [selected]="selectOption()" value="en">en</option>
-          <option [selected]="!selectOption()" value="ar">ar</option>
+          <option [selected]="selectOption()" value="en">{{'navbar.en' | translate}}</option>
+          <option [selected]="!selectOption()" value="ar">{{'navbar.ar' | translate}}</option>
         </select>
       </ul>
     </div>

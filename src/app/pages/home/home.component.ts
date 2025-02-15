@@ -7,10 +7,11 @@ import { CategoriesService } from '../../core/services/categories/categories.ser
 import { ProductsService } from '../../core/services/products/products.service';
 import { ProductItemComponent } from "../../shared/components/ui/product-item/product-item.component";
 import { CategoryItemComponent } from "../../shared/components/ui/category-item/category-item.component";
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
-  imports: [CarouselModule, ProductItemComponent, CategoryItemComponent],
+  imports: [CarouselModule, ProductItemComponent, CategoryItemComponent, TranslatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

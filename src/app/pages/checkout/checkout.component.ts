@@ -1,14 +1,15 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CartService } from '../../core/services/cart/cart.service';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
 import { Subscription } from 'rxjs';
+import { CartService } from '../../core/services/cart/cart.service';
+import { ErrorMessageComponent } from "../../shared/components/ui/error-message/error-message.component";
 
 @Component({
   selector: 'app-checkout',
-  imports: [ReactiveFormsModule, ErrorMessageComponent],
+  imports: [ReactiveFormsModule, ErrorMessageComponent, TranslatePipe],
   templateUrl: './checkout.component.html',
   styleUrl: './checkout.component.scss'
 })

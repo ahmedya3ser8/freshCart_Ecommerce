@@ -1,18 +1,12 @@
-import { IProduct } from "./iproduct"
+import { ICartProduct } from "./icart-product"
 
 export interface ICart {
   _id: string
   cartOwner: string
-  products: Product[]
+  products: ICartProduct[]
   createdAt: string
   updatedAt: string
   __v: number
   totalCartPrice: number
 }
 
-export interface Product {
-  count: number
-  _id: string
-  product: IProduct
-  price: number
-}

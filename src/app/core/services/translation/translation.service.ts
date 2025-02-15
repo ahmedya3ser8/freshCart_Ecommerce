@@ -29,8 +29,10 @@ export class TranslationService {
     const savedLang = localStorage.getItem('lang');
     if (savedLang === 'en') {
       document.documentElement.dir = 'ltr';
+      document.documentElement.lang = "en";
     } else if(savedLang === 'ar') {
       document.documentElement.dir = 'rtl';
+      document.documentElement.lang = "ar";
     }
   }
 }

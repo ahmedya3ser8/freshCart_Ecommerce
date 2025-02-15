@@ -1,0 +1,22 @@
+<div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+  @for (product of products; track product.id ) {
+    <div class="product bg-[#f6f6f6] flex items-center md:gap-5 rounded-lg border border-[#ccc] mt-4 overflow-hidden">
+      <div class="image">
+        <img [src]="product.imageCover" class="w-full h-[100px] object-contain" alt="product image" />
+      </div>
+      <div class="flex flex-1 justify-between items-center p-4">
+        <div class="content">
+          <h2 class="text-green-600 font-medium mb-2"> {{product.title}} </h2>
+          <div class="flex gap-5">
+            <div class="price">
+              <span class="text-gray-600 font-medium"> {{'cartPage.price' | translate }} : </span>
+              <span class="text-green-600"> {{product.price}} {{'cartPage.priceCode' | translate }}</span>
+            </div>
+            <button (click)="removeProductFromWishlist(product.id)" ><i class="fa-solid fa-trash text-green-600 text-[18px]"></i></button>
+          </div>
+        </div>
+        <button class="p-2 bg-green-600 text-white rounded-lg"> {{'products.btn' | translate }} </button>
+      </div>
+    </div>
+  }
+</div>
