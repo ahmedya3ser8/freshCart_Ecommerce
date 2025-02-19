@@ -11,7 +11,7 @@ import { NgxSpinnerService } from "ngx-spinner";
 import { loadingInterceptor } from './core/interceptors/loading/loading.interceptor';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { API_BASE_URL } from './token/api-token';
+import { API_BASE_URL, API_URL_CHECKOUT } from './token/api-token';
 import { environment } from './core/environments/environment';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -44,6 +44,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: API_BASE_URL,
       useValue: environment.baseUrl
+    },
+    {
+      provide: API_URL_CHECKOUT,
+      useValue: environment.checkoutUrl
     }
   ]
 };

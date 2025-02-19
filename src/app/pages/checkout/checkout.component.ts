@@ -46,6 +46,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.cartService.checkoutOnline(this.currentId, this.checkoutForm.value).subscribe({
         next: (res) => {
           if (res.status === 'success') {
+            this.checkoutForm.reset();
             this.toastrService.success('order has been done!');
             open(res.session.url, '_self');
           }
@@ -63,8 +64,8 @@ export class CheckoutComponent implements OnInit, OnDestroy {
       this.subscriptions.push(this.cartService.checkoutCash(this.currentId, this.checkoutForm.value).subscribe({
         next: (res) => {
           if (res.status === 'success') {
-            this.toastrService.success('order has been done!');
             this.checkoutForm.reset();
+            this.toastrService.success('order has been done!');
             this.router.navigateByUrl(`/allorders`);
           }
         },

@@ -2,6 +2,7 @@
   "navbar": {
     "home": "Home",
     "products": "Products",
+    "allorders": "Orders",
     "categories": "Categories",
     "brands": "Brands",
     "logout": "Logout",
@@ -100,5 +101,14 @@
     "codeError": "Code must contain 6 numbers",
     "detailsMsg": "details is required",
     "cityMsg": "city is required"
+  },
+  "ordersPage": {
+    "image": "Image",
+    "name": "Name",
+    "price": "Price",
+    "quantity": "Quantity",
+    "total": "Total",
+    "date": "Date",
+    "priceCode": "EGP"
   }
 }

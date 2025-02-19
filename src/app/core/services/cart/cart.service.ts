@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal, WritableSignal } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { API_BASE_URL } from '../../../token/api-token';
+import { Observable } from 'rxjs';
+import { API_BASE_URL, API_URL_CHECKOUT } from '../../../token/api-token';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +9,7 @@ import { API_BASE_URL } from '../../../token/api-token';
 export class CartService {
   cartCount: WritableSignal<number> = signal(0);
   private readonly baseUrl = inject(API_BASE_URL);
+  private readonly checkoutUrl = inject(API_URL_CHECKOUT);
   constructor(private httpClient:HttpClient) { }
   addProductToCart(id: string): Observable<any> {
     return this.httpClient.post(`${this.baseUrl}/api/v1/cart`, {
@@ -30,7 +31,7 @@ export class CartService {
     return this.httpClient.delete(`${this.baseUrl}/api/v1/cart`);
   }
   checkoutOnline(id: string, data: any): Observable<any> {
-    return this.httpClient.post(`${this.baseUrl}/api/v1/orders/checkout-session/${id}?url=http://localhost:4200`, {
+    return this.httpClient.post(`${this.baseUrl}/api/v1/orders/checkout-session/${id}?url=${this.checkoutUrl}`, {
       shippingAddress: data
     })
   }
@@ -38,5 +39,8 @@ export class CartService {
     return this.httpClient.post(`${this.baseUrl}/api/v1/orders/${id}`, {
       shippingAddress: data
     })
+  }
+  getUserOrders(userId: string): Observable<any> {
+    return this.httpClient.get(`${this.baseUrl}/api/v1/orders/user/${userId}`);
   }
 }

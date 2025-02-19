@@ -21,10 +21,12 @@ export class AuthService {
   getUserData():void {
     if (localStorage.getItem('token') !== null) {
       this.userData = jwtDecode(localStorage.getItem('token')!);
+      localStorage.setItem('userId', this.userData.id);
     }
   }
   logout():void {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     this.userData = null;
     // call api to remove token
     this.router.navigateByUrl('/auth/login');
