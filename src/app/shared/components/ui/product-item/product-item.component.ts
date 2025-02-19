@@ -35,6 +35,7 @@ export class ProductItemComponent implements OnInit,OnDestroy {
     this.subscriptions.push(this.cartService.addProductToCart(id).subscribe({
       next: (res) => {
         if (res.status === 'success') {
+          this.cartService.cartCount.set(res.numOfCartItems);
           this.toastrService.success(res.message);
         }
       }
@@ -44,6 +45,7 @@ export class ProductItemComponent implements OnInit,OnDestroy {
     this.subscriptions.push(this.wishlistService.addProductToWishlist(id).subscribe({
       next: (res) => {
         if (res.status === 'success') {
+          this.wishlistService.wishlistCount.set(res.data.length);
           this.productIds = res.data || [];
           localStorage.setItem('productIds', JSON.stringify(this.productIds));
           this.toastrService.success(res.message);
@@ -52,15 +54,16 @@ export class ProductItemComponent implements OnInit,OnDestroy {
     }))
   }
   removeProductFromWishlist(id: string): void {
-    this.wishlistService.removeProductFromWishlist(id).subscribe({
+    this.subscriptions.push(this.wishlistService.removeProductFromWishlist(id).subscribe({
       next: (res) => {
         if (res.status === "success") {
+          this.wishlistService.wishlistCount.set(res.data.length);
           this.productIds = res.data || [];
           localStorage.setItem('productIds', JSON.stringify(this.productIds));
           this.toastrService.success(res.message);
         }
       }
-    })
+    }))
   }
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());

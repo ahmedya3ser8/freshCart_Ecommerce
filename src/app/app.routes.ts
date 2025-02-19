@@ -5,8 +5,8 @@ import { loggedGuard } from './core/guards/logged/logged.guard';
 import { authGuard } from './core/guards/auth/auth.guard';
 
 export const routes: Routes = [
-  {path: '', redirectTo: 'login', pathMatch: 'full'},
-  {path: '', component: MainAuthComponent, children: [
+  {path: '', redirectTo: 'auth/login', pathMatch: 'full'},
+  {path: 'auth', component: MainAuthComponent, children: [
     {path: 'login', loadComponent: () => import('./pages/login/login.component').then((c) => c.LoginComponent), canActivate: [loggedGuard], title: 'login'},
     {path: 'register', loadComponent: () => import('./pages/register/register.component').then((c) => c.RegisterComponent), canActivate: [loggedGuard], title: 'register'},
     {path: 'forget-password', loadComponent: () => import('./pages/forget-password/forget-password.component').then((c) => c.ForgetPasswordComponent), canActivate: [loggedGuard], title: 'forget-password'}

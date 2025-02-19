@@ -77,5 +77,28 @@
     "city": "City",
     "online": "Checkout Online",
     "cash": "Checkout Cash"
+  },
+  "wishlistPage": {
+    "wishlistEmpty": "there are no items in your wishlist",
+    "btn": "add to cart",
+    "priceCode": "EGP",
+    "price": "Price"
+  },
+  "errors": {
+    "emailMsg": "email is required",
+    "passwordMsg": "password is required",
+    "validEmail": "enter valid email",
+    "minlength": "name should be more than or equal 3 chars",
+    "maxlength": "name should be less than or equal 20 chars",
+    "passwordError": "password must start with upperCase then any 6 chars or more",
+    "nameMsg": "name is required",
+    "confirmPss": "confirm password is required",
+    "incorrectConfirmPass": "password confirmation is incorrect",
+    "phoneMsg": "phone is required",
+    "phoneError": "accept only egypt phone numbers",
+    "codeMsg": "Code is required",
+    "codeError": "Code must contain 6 numbers",
+    "detailsMsg": "details is required",
+    "cityMsg": "city is required"
   }
 }

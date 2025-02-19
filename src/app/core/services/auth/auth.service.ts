@@ -21,14 +21,13 @@ export class AuthService {
   getUserData():void {
     if (localStorage.getItem('token') !== null) {
       this.userData = jwtDecode(localStorage.getItem('token')!);
-      console.log(this.userData);
     }
   }
   logout():void {
     localStorage.removeItem('token');
     this.userData = null;
     // call api to remove token
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/auth/login');
   }
   verifyEmail(data: any): Observable<any> {
     return this.httpClient.post(`${this.baseUrl}/api/v1/auth/forgotPasswords`, data);

@@ -4,14 +4,14 @@
       <div class="title flex justify-between items-center">
         <div class="flex items-center gap-4">
           <h1 class="text-3xl font-bold text-green-600"> {{"cartPage.cart" | translate }} </h1>
-          <span class="text-sm"> <span class="text-red-600 font-medium"> {{cartProductsCount}} </span>{{"cartPage.items" | translate }}</span>
+          <span class="text-sm"> <span class="text-red-600 font-medium"> {{cartCounter()}} </span>{{"cartPage.items" | translate }}</span>
         </div>
         <button (click)="clearCart()" class="clear-cart p-2 rounded-lg bg-green-600 text-white">{{"cartPage.clearBtn" | translate }}</button>
       </div>
       @for (product of cartProducts.products; track product.product.id ) {
         <div class="product flex items-center md:gap-5 rounded-lg border border-[#ccc] mt-4 overflow-hidden">
           <div class="image">
-            <img [src]="product.product.imageCover" class="w-full h-[100px] object-contain" [alt]="product.product.title" />
+            <img loading="lazy" [src]="product.product.imageCover" class="w-full h-[100px] object-contain" [alt]="product.product.title" />
           </div>
           <div class="content flex flex-1 justify-between items-center p-4">
             <div class="">

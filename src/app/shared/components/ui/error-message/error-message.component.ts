@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-error-message',
-  imports: [],
+  imports: [TranslatePipe],
   templateUrl: './error-message.component.html',
   styleUrl: './error-message.component.scss'
 })

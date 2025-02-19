@@ -1,12 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { API_BASE_URL } from '../../../token/api-token';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CartService {
+  cartCount: WritableSignal<number> = signal(0);
   private readonly baseUrl = inject(API_BASE_URL);
   constructor(private httpClient:HttpClient) { }
   addProductToCart(id: string): Observable<any> {

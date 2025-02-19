@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, computed, inject, OnDestroy, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -16,7 +16,7 @@ import { ICart } from '../../shared/interfaces/icart';
 })
 export class CartComponent implements OnInit, OnDestroy {
   cartProducts: ICart = <ICart>{};
-  cartProductsCount: number = 0;
+  cartCounter: Signal<number> = computed(() => this.cartService.cartCount())
   dicount: number = 10;
   payment: string = 'online';
   date: Date = new Date();
@@ -29,7 +29,7 @@ export class CartComponent implements OnInit, OnDestroy {
   getAllCartProducts(): void {
     this.subscriptions.push(this.cartService.getAllCartProducts().subscribe({
       next: (res) => {
-        this.cartProductsCount = res.numOfCartItems;
+        this.cartService.cartCount.set(res.numOfCartItems);
         this.cartProducts = res.data;
       }
     }))
@@ -58,7 +58,7 @@ export class CartComponent implements OnInit, OnDestroy {
         this.subscriptions.push(this.cartService.removeProductFromCart(id).subscribe({
           next: (res) => {
             if (res.status === 'success') {
-              this.cartProductsCount = res.numOfCartItems;
+              this.cartService.cartCount.set(res.numOfCartItems);
               this.cartProducts = res.data;
               Swal.fire({
                 title: "Deleted!",
@@ -85,7 +85,7 @@ export class CartComponent implements OnInit, OnDestroy {
         this.subscriptions.push(this.cartService.clearCart().subscribe({
           next: (res) => {
             if (res.message === 'success') {
-              this.cartProductsCount = 0;
+              this.cartService.cartCount.set(0);
               this.cartProducts = {} as ICart;
               Swal.fire({
                 title: "Deleted!",

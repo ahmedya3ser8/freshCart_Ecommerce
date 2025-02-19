@@ -14,7 +14,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit,OnDestroy {
-  loading: boolean = false;
   errorMsg: string = '';
   toggleInput: boolean = false;
   subscription: Subscription = new Subscription();
@@ -30,10 +29,8 @@ export class LoginComponent implements OnInit,OnDestroy {
   }
   login() {
     if (this.loginForm.valid) {
-      this.loading = true;
       this.subscription = this.authService.login(this.loginForm.value).subscribe({
         next: (res) => {
-          this.loading = false;
           if(res.message === 'success') {
             localStorage.setItem('token', res.token);
             this.authService.getUserData();
@@ -41,7 +38,6 @@ export class LoginComponent implements OnInit,OnDestroy {
           }
         },
         error: (err: any) => {
-          this.loading = false;
           this.errorMsg = err;
         }
       })

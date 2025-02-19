@@ -4,7 +4,7 @@
     <div class="relative z-0 w-full mb-5 group">
         <input type="email" name="email" id="email" formControlName="email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-green-600 focus:outline-none focus:ring-0 focus:border-green-600 peer" placeholder=" " />
         <label for="email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-green-600 peer-focus:dark:text-green-600 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">{{"loginPage.email" | translate}}</label>
-        <app-error-message [inputTitle]="'email is required'" [inputControl]="email"></app-error-message>
+        <app-error-message [inputTitle]="'errors.emailMsg' | translate" [inputControl]="email"></app-error-message>
     </div>
     <div class="relative z-0 w-full mb-5 group">
         <input [type]="!toggleInput ? 'password' : 'text'" name="password" id="password" formControlName="password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-green-600 focus:outline-none focus:ring-0 focus:border-green-600 peer" placeholder=" " />
@@ -16,16 +16,13 @@
             <i class="fa fa-eye-slash text-sm"></i>
           }
         </span>
-        <app-error-message [inputTitle]="'password is required'" [inputControl]="password" [inputMessage]="'password must start with upperCase then any 6 chars or more'" ></app-error-message>
+        <app-error-message [inputTitle]="'errors.passwordMsg' | translate" [inputControl]="password" [inputMessage]="'errors.passwordError' | translate" ></app-error-message>
     </div>
-    <a routerLink="/forget-password" class="underline my-3 text-green-600 block text-end">{{"loginPage.forgetPassword" | translate}}</a>
+    <a routerLink="/auth/forget-password" class="underline my-3 text-green-600 block text-end">{{"loginPage.forgetPassword" | translate}}</a>
     <button type="submit" class="text-white bg-green-500 hover:bg-green-600 focus:ring-0 focus:outline-none font-medium rounded-lg text-sm w-full px-5 py-2.5 text-center">
       {{"loginPage.login" | translate}}
-      @if (loading) {
-        <i class="fas fa-spin fa-spinner ms-2"></i>
-      }
     </button>
-    <p class="text-center my-3 text-gray-400">{{"loginPage.desc" | translate}} <a class="underline text-green-600 font-medium" routerLink="/register">{{"loginPage.register" | translate}}</a></p>
+    <p class="text-center my-3 text-gray-400">{{"loginPage.desc" | translate}} <a class="underline text-green-600 font-medium" routerLink="/auth/register">{{"loginPage.register" | translate}}</a></p>
   </form>
   @if (errorMsg) {
     <div class="text-center text-red-500 my-2 text-lg p-2"> {{errorMsg}} </div>

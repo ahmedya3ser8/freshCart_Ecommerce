@@ -14,7 +14,6 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  loading: boolean = false;
   errorMsg: string = '';
   toggleInput: boolean = false;
   subscription: Subscription = new Subscription();
@@ -32,19 +31,16 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }, { validators: this.confirmPassword });
   }
   register() {
-    console.log(this.registerForm);
     if (this.registerForm.valid) {
-      this.loading = true;
       this.subscription = this.authService.register(this.registerForm.value).subscribe({
         next: (res) => {
-          this.loading = false;
           if(res.message === 'success') {
-            this.router.navigateByUrl(`/login`);
+            this.router.navigateByUrl(`/auth/login`);
           }
         },
-        error: (err: HttpErrorResponse) => {
-          this.loading = false;
-          this.errorMsg = err.error.message;
+        error: (err) => {
+          console.log(err);
+          this.errorMsg = err;
         }
       })
     } else {

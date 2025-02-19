@@ -3,6 +3,8 @@ import { WishlistService } from '../../core/services/wishlist/wishlist.service';
 import { IProduct } from '../../shared/interfaces/iproduct';
 import { ToastrService } from 'ngx-toastr';
 import { TranslatePipe } from '@ngx-translate/core';
+import { Subscription } from 'rxjs';
+import { CartService } from '../../core/services/cart/cart.service';
 
 @Component({
   selector: 'app-wishlist',
@@ -12,7 +14,9 @@ import { TranslatePipe } from '@ngx-translate/core';
 })
 export class WishlistComponent implements OnInit {
   products: IProduct[] = [];
+  subscriptions: Subscription[] = []
   private readonly wishlistService = inject(WishlistService);
+  private readonly cartService = inject(CartService);
   private readonly toastrService = inject(ToastrService);
   ngOnInit(): void {
     this.getAllWishlistProducts();
@@ -21,6 +25,7 @@ export class WishlistComponent implements OnInit {
     this.wishlistService.getAllWishlistProducts().subscribe({
       next: (res) => {
         if (res.status === "success") {
+          this.wishlistService.wishlistCount.set(res.count);
           this.products = res.data;
         }
       }
@@ -37,5 +42,17 @@ export class WishlistComponent implements OnInit {
         }
       }
     })
+  }
+  addToCart(id: string): void {
+    this.subscriptions.push(this.cartService.addProductToCart(id).subscribe({
+      next: (res) => {
+        if (res.status === 'success') {
+          this.cartService.cartCount.set(res.numOfCartItems);
+          this.toastrService.success(res.message);
+          this.removeProductFromWishlist(id);
+          this.getAllWishlistProducts();
+        }
+      }
+    }))
   }
 }

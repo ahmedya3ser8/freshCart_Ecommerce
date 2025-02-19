@@ -14,11 +14,10 @@ import { ErrorMessageComponent } from "../../shared/components/ui/error-message/
   styleUrl: './checkout.component.scss'
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
-  loading: boolean = false;
   errorMsg: string = '';
   currentId: string = '';
   payment: string = '';
-    subscriptions: Subscription[] = [];
+  subscriptions: Subscription[] = [];
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
   private readonly toastrService = inject(ToastrService);
@@ -44,17 +43,14 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
   checkoutOnline(): void {
     if (this.checkoutForm.valid) {
-      this.loading = true;
       this.subscriptions.push(this.cartService.checkoutOnline(this.currentId, this.checkoutForm.value).subscribe({
         next: (res) => {
           if (res.status === 'success') {
             this.toastrService.success('order has been done!');
             open(res.session.url, '_self');
-            this.loading = false;
           }
         },
         error: (err) => {
-          this.loading = false;
           this.errorMsg = err;
         }
       }))
@@ -64,17 +60,15 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
   checkoutCash(): void {
     if (this.checkoutForm.valid) {
-      this.loading = true;
       this.subscriptions.push(this.cartService.checkoutCash(this.currentId, this.checkoutForm.value).subscribe({
         next: (res) => {
           if (res.status === 'success') {
-            this.loading = false;
             this.toastrService.success('order has been done!');
+            this.checkoutForm.reset();
             this.router.navigateByUrl(`/allorders`);
           }
         },
         error: (err) => {
-          this.loading = false;
           this.errorMsg = err;
         }
       }))

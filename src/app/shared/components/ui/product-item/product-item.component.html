@@ -1,6 +1,6 @@
 <div class="card border border-green-500 pt-4 pb-2 px-2 relative rounded-2xl">
   <div class="image cursor-pointer" [routerLink]="['/details/',product().id]">
-    <img [src]="product().imageCover" class="w-full h-[150px] object-contain" alt="product image" />
+    <img loading="lazy" [src]="product().imageCover" class="w-full h-[150px] object-contain" alt="product image" />
   </div>
   <div class="body mt-2">
     <h3 class="text-green-500 font-medium"> {{product().category.name}} </h3>

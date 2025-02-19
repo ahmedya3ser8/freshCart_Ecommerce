@@ -4,13 +4,13 @@
       @if (inputControl()?.getError('required')) {
         <li> {{inputTitle()}} </li>
       } @else if(inputControl()?.getError('email')) {
-        <li>enter valid email</li>
+        <li> {{'errors.validEmail' | translate  }} </li>
       } @else if (inputControl()?.getError('pattern')) {
         <li> {{inputMessage()}} </li>
       } @else if (inputControl()?.getError('minlength')) {
-        <li>name should be more than or equal  3 chars</li>
+        <li> {{'errors.minlength' | translate}} Z</li>
       } @else if (inputControl()?.getError('maxlength')) {
-        <li>name should be less than or equal  20 chars</li>
+        <li> {{'errors.maxlength' | translate}} </li>
       }
     </ul>
   </div>

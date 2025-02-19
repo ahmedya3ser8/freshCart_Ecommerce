@@ -47,8 +47,8 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
             this.step = 2;
           }
         },
-        error: (err: HttpErrorResponse) => {
-          this.errorMsg = err.error.message.split(" ", 9).join(" ");
+        error: (err) => {
+          this.errorMsg = err.split(" ", 9).join(" ");
         }
       }))
     } else {
@@ -64,8 +64,8 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
             this.step = 3;
           }
         },
-        error: (err: HttpErrorResponse) => {
-          this.errorMsg = err.error.message;
+        error: (err) => {
+          this.errorMsg = err;
         }
       }))
     } else {
