@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, InputSignal } from '@angular/core';
 import { ICategory } from '../../../interfaces/icategory';
 
 @Component({
@@ -8,5 +8,5 @@ import { ICategory } from '../../../interfaces/icategory';
   styleUrl: './category-item.component.scss'
 })
 export class CategoryItemComponent {
-  category = input.required<ICategory>();
+  category: InputSignal<ICategory> = input.required<ICategory>();
 }

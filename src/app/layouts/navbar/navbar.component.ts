@@ -1,4 +1,4 @@
-import { Component, computed, inject, Input, OnInit, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, inject, input, Input, InputSignal, OnInit, Signal, signal, WritableSignal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/auth/auth.service';
@@ -15,7 +15,7 @@ import { WishlistService } from '../../core/services/wishlist/wishlist.service';
 export class NavbarComponent implements OnInit {
   cartCounter: Signal<number> = computed(() => this.cartService.cartCount());
   wishlistCounter: Signal<number> = computed(() => this.wishlistService.wishlistCount());
-  @Input({required: true}) isLogin: boolean = true;
+  isLogin: InputSignal<boolean> = input(true);
   readonly authService = inject(AuthService);
   readonly cartService = inject(CartService);
   readonly wishlistService = inject(WishlistService);

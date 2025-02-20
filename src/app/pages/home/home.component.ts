@@ -68,9 +68,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.getCategories();
   }
   getProducts() {
-    this.subscriptions.push(this.productsService.getAllProducts().pipe(map(data => data.data.slice(0, 12))).subscribe({
+    this.subscriptions.push(this.productsService.getAllProducts(1,12).subscribe({
       next: (res) => {
-        this.products = res;
+        this.products = res.data;
       }
     }))
   }

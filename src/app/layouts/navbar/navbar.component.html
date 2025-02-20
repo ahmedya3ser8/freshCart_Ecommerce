@@ -10,7 +10,7 @@
         </svg>
     </button>
     <div class="hidden w-full md:flex md:flex-grow md:w-auto md:px-10" id="navbar-default">
-      @if (isLogin) {
+      @if (isLogin()) {
         <ul class="font-medium flex flex-col md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-2 rtl:space-x-reverse md:mt-0 md:border-0 dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
           <li>
             <a routerLink="/home" routerLinkActive="active" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg" aria-current="page"> {{'navbar.home' | translate}} </a>
@@ -50,7 +50,7 @@
             <i class="fa-brands fa-linkedin"></i>
           </a>
         </li>
-        @if (!isLogin) {
+        @if (!isLogin()) {
           <li>
             <a routerLink="/auth/register" routerLinkActive="active" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">{{'navbar.register' | translate}}</a>
           </li>
@@ -62,13 +62,13 @@
             <a routerLink="/cart" routerLinkActive="cart" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">
               <i class="fa-solid fa-cart-shopping"></i>
             </a>
-            <span class="absolute top-[-5px] right-[-1px] size-4 text-red-600"> {{cartCounter()}} </span>
+            <span class="absolute top-[-7px] right-[-1px] size-5 bg-green-600 text-white flex justify-center items-center rounded-md"> {{cartCounter()}} </span>
           </li>
           <li class="relative">
             <a routerLink="/wishlist" routerLinkActive="cart" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-lg">
               <i class="fa-solid fa-heart text-xl"></i>
             </a>
-            <span class="absolute top-[-5px] right-[-1px] size-4 text-red-600"> {{wishlistCounter()}} </span>
+            <span class="absolute top-[-7px] right-[-1px] size-5 bg-green-600 text-white flex justify-center items-center rounded-md"> {{wishlistCounter()}} </span>
           </li>
           <li>
             <a role="button" (click)="authService.logout()" class="block py-2 px-3 text-gray-400 transition-all duration-700 hover:text-gray-700 cursor-pointer rounded-sm"> {{'navbar.logout' | translate}} </a>

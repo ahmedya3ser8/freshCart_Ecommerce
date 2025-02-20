@@ -16,7 +16,9 @@
     "desc": "we will send you a link, open it on your phone to download the app",
     "payments": "payments partners",
     "delivers": "get delivers with freshCart",
-    "btn": "share app link"
+    "btn": "share app link",
+    "copyright": "Copyright © All Right Reserved",
+    "author": "Ahmed Yasser"
   },
   "categories": {
     "title": "Popular Categories"

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { WishlistService } from '../../core/services/wishlist/wishlist.service';
 import { IProduct } from '../../shared/interfaces/iproduct';
 import { ToastrService } from 'ngx-toastr';
@@ -12,7 +12,7 @@ import { CartService } from '../../core/services/cart/cart.service';
   templateUrl: './wishlist.component.html',
   styleUrl: './wishlist.component.scss'
 })
-export class WishlistComponent implements OnInit {
+export class WishlistComponent implements OnInit, OnDestroy {
   products: IProduct[] = [];
   subscriptions: Subscription[] = []
   private readonly wishlistService = inject(WishlistService);
@@ -22,17 +22,17 @@ export class WishlistComponent implements OnInit {
     this.getAllWishlistProducts();
   }
   getAllWishlistProducts(): void {
-    this.wishlistService.getAllWishlistProducts().subscribe({
+    this.subscriptions.push(this.wishlistService.getAllWishlistProducts().subscribe({
       next: (res) => {
         if (res.status === "success") {
           this.wishlistService.wishlistCount.set(res.count);
           this.products = res.data;
         }
       }
-    })
+    }))
   }
   removeProductFromWishlist(id: string): void {
-    this.wishlistService.removeProductFromWishlist(id).subscribe({
+    this.subscriptions.push(this.wishlistService.removeProductFromWishlist(id).subscribe({
       next: (res) => {
         if (res.status === "success") {
           let productIds: string[] = res.data;
@@ -41,7 +41,7 @@ export class WishlistComponent implements OnInit {
           this.getAllWishlistProducts();
         }
       }
-    })
+    }))
   }
   addToCart(id: string): void {
     this.subscriptions.push(this.cartService.addProductToCart(id).subscribe({
@@ -54,5 +54,8 @@ export class WishlistComponent implements OnInit {
         }
       }
     }))
+  }
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 }
