@@ -8,7 +8,7 @@
         </div>
         <button (click)="clearCart()" class="clear-cart p-2 rounded-lg bg-green-600 text-white">{{"cartPage.clearBtn" | translate }}</button>
       </div>
-      @for (product of cartProducts.products; track product.product.id ) {
+      @for (product of cartProducts()?.products; track product.product.id ) {
         <div class="product flex items-center md:gap-5 rounded-lg border border-[#ccc] mt-4 overflow-hidden">
           <div class="image">
             <img loading="lazy" [src]="product.product.imageCover" class="w-full h-[100px] object-contain" [alt]="product.product.title" />
@@ -39,7 +39,7 @@
       <div class="top pb-4 border-b border-b-[#ccc]">
         <div class="flex justify-between items-center mb-3">
           <strong>{{"cartPage.price" | translate }}</strong>
-          <span> {{cartProducts.totalCartPrice}} {{"cartPage.priceCode" | translate }}</span>
+          <span> {{cartProducts()?.totalCartPrice}} {{"cartPage.priceCode" | translate }}</span>
         </div>
         <div class="flex justify-between items-center mb-3">
           <strong>{{"cartPage.discount" | translate }}</strong>
@@ -68,7 +68,7 @@
         <option class="p-1 mb-2" value="online" selected>{{"cartPage.online" | translate }}</option>
         <option class="p-1 mb-2" value="cash">{{"cartPage.cash" | translate }}</option>
       </select>
-      <button [routerLink]="['/checkout', cartProducts._id]" [queryParams]="{'payment': payment}" class="p-[10px] bg-green-600 text-white transition-all duration-700 hover:bg-green-700 rounded-[25px] w-full mt-4">{{"cartPage.checkout" | translate }}</button>
+      <button [routerLink]="['/checkout', cartProducts()?._id]" [queryParams]="{'payment': payment()}" class="p-[10px] bg-green-600 text-white transition-all duration-700 hover:bg-green-700 rounded-[25px] w-full mt-4">{{"cartPage.checkout" | translate }}</button>
     </div>
   </div>
 </section>

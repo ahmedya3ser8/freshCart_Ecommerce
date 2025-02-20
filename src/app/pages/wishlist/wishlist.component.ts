@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { WishlistService } from '../../core/services/wishlist/wishlist.service';
 import { IProduct } from '../../shared/interfaces/iproduct';
 import { ToastrService } from 'ngx-toastr';
@@ -13,7 +13,7 @@ import { CartService } from '../../core/services/cart/cart.service';
   styleUrl: './wishlist.component.scss'
 })
 export class WishlistComponent implements OnInit, OnDestroy {
-  products: IProduct[] = [];
+  products: WritableSignal<IProduct[]> = signal([]);
   subscriptions: Subscription[] = []
   private readonly wishlistService = inject(WishlistService);
   private readonly cartService = inject(CartService);
@@ -26,7 +26,7 @@ export class WishlistComponent implements OnInit, OnDestroy {
       next: (res) => {
         if (res.status === "success") {
           this.wishlistService.wishlistCount.set(res.count);
-          this.products = res.data;
+          this.products.set(res.data);
         }
       }
     }))

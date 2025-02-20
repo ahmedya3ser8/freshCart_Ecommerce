@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
@@ -14,8 +14,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit,OnDestroy {
-  errorMsg: string = '';
-  toggleInput: boolean = false;
+  errorMsg: WritableSignal<string> = signal('');
+  toggleInput: WritableSignal<boolean> = signal(false);
   subscription: Subscription = new Subscription();
   loginForm!: FormGroup;
   private readonly authService = inject(AuthService);
@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit,OnDestroy {
           }
         },
         error: (err: any) => {
-          this.errorMsg = err;
+          this.errorMsg.set(err);
         }
       })
     } else {
@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit,OnDestroy {
     }
   }
   toggle(): void {
-    this.toggleInput = !this.toggleInput;
+    this.toggleInput.update((prev) => !prev);
   }
   get email() {
     return this.loginForm.get('email');

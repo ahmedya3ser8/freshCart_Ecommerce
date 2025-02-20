@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { IBrand } from '../../shared/interfaces/ibrand';
 import { BrandsService } from '../../core/services/brands/brands.service';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './brands.component.scss'
 })
 export class BrandsComponent implements OnInit, OnDestroy {
-  brands: IBrand[] = [];
+  brands: WritableSignal<IBrand[]> = signal([]);
   subscription: Subscription = new Subscription();
   private readonly brandsService = inject(BrandsService);
   ngOnInit(): void {
@@ -19,7 +19,7 @@ export class BrandsComponent implements OnInit, OnDestroy {
   getAllBrands(): void {
     this.subscription = this.brandsService.getAllBrands().subscribe({
       next: (res) => {
-        this.brands = res.data;
+        this.brands.set(res.data);
       }
     })
   }

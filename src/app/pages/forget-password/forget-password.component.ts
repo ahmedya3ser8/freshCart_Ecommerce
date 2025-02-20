@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -14,9 +14,9 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './forget-password.component.scss'
 })
 export class ForgetPasswordComponent implements OnInit, OnDestroy {
-  errorMsg: string = '';
-  step: number = 1;
-  toggleInput: boolean = false;
+  errorMsg:WritableSignal<string> = signal('');
+  step: WritableSignal<number> = signal(1);
+  toggleInput: WritableSignal<boolean> = signal(false);
   subscriptions: Subscription[] = [];
   verifyEmailForm!: FormGroup;
   verifyCodeForm!: FormGroup;
@@ -40,15 +40,15 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
     if (this.verifyEmailForm.valid) {
       const emailValue = this.verifyEmail?.value;
       this.resetEmail?.patchValue(emailValue);
-      this.errorMsg = '';
+      this.errorMsg.set('');
       this.subscriptions.push(this.authService.verifyEmail(this.verifyEmailForm.value).subscribe({
         next: (res) => {
           if (res.statusMsg === 'success') {
-            this.step = 2;
+            this.step.set(2);
           }
         },
         error: (err) => {
-          this.errorMsg = err.split(" ", 9).join(" ");
+          this.errorMsg.set(err.split(" ", 9).join(" "));
         }
       }))
     } else {
@@ -57,15 +57,15 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
   }
   submitVerifyCode() {
     if (this.verifyCodeForm.valid) {
-      this.errorMsg = '';
+      this.errorMsg.set('');
       this.subscriptions.push(this.authService.verifyCode(this.verifyCodeForm.value).subscribe({
         next: (res) => {
           if (res.status === 'Success') {
-            this.step = 3;
+            this.step.set(3);
           }
         },
         error: (err) => {
-          this.errorMsg = err;
+          this.errorMsg.set(err);
         }
       }))
     } else {
@@ -74,7 +74,7 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
   }
   submitResetPassword() {
     if (this.resetPasswordForm.valid) {
-      this.errorMsg = '';
+      this.errorMsg.set('');
       this.subscriptions.push(this.authService.resetPassword(this.resetPasswordForm.value).subscribe({
         next: (res) => {
           localStorage.setItem("token", res.token);
@@ -87,7 +87,7 @@ export class ForgetPasswordComponent implements OnInit, OnDestroy {
     }
   }
   toggle(): void {
-    this.toggleInput = !this.toggleInput;
+    this.toggleInput.update((prev) => !prev);
   }
   selectedLang() {
     if (localStorage.getItem('lang') === 'en') {

@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { CarouselModule, OwlOptions } from 'ngx-owl-carousel-o';
 import { map, Subscription } from 'rxjs';
 import { ICategory } from '../../shared/interfaces/icategory';
@@ -16,10 +16,10 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  products: IProduct[] = [];
-  categories: ICategory[] = [];
+  products: WritableSignal<IProduct[]> = signal([]);
+  categories: WritableSignal<ICategory[]> = signal([]);
   subscriptions: Subscription[] = [];
-  imagesUrl: string[] = ['/images/img1.avif', '/images/img2.avif', '/images/img3.avif', '/images/img4.avif', '/images/img5.avif', '/images/img6.avif', '/images/img7.avif'];
+  imagesUrl: WritableSignal<string[]> = signal(['/images/img1.avif', '/images/img2.avif', '/images/img3.avif', '/images/img4.avif', '/images/img5.avif', '/images/img6.avif', '/images/img7.avif'])
   customCategoriesOptions: OwlOptions = {
     loop: true,
     margin: 15,
@@ -70,14 +70,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   getProducts() {
     this.subscriptions.push(this.productsService.getAllProducts(1,12).subscribe({
       next: (res) => {
-        this.products = res.data;
+        this.products.set(res.data);
       }
     }))
   }
   getCategories() {
     this.subscriptions.push(this.categoriesService.getAllCategories().subscribe({
       next: (res) => {
-        this.categories = res.data;
+        this.categories.set(res.data);
       }
     }))
   }

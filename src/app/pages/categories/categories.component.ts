@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { CategoryItemComponent } from "../../shared/components/ui/category-item/category-item.component";
 import { CategoriesService } from '../../core/services/categories/categories.service';
 import { ICategory } from '../../shared/interfaces/icategory';
@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs';
   styleUrl: './categories.component.scss'
 })
 export class CategoriesComponent implements OnInit, OnDestroy {
-  categories: ICategory[] = [];
+  categories: WritableSignal<ICategory[]> = signal([]);
   subscription: Subscription = new Subscription();
   private readonly categoriesService = inject(CategoriesService);
   ngOnInit(): void {
@@ -20,7 +20,7 @@ export class CategoriesComponent implements OnInit, OnDestroy {
   getAllCategories(): void {
     this.subscription = this.categoriesService.getAllCategories().subscribe({
       next: (res) => {
-        this.categories = res.data;
+        this.categories.set(res.data);
       }
     })
   }

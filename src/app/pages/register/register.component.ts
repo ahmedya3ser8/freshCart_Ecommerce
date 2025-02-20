@@ -1,5 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/auth/auth.service';
@@ -14,8 +14,8 @@ import { TranslatePipe } from '@ngx-translate/core';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent implements OnInit, OnDestroy {
-  errorMsg: string = '';
-  toggleInput: boolean = false;
+  errorMsg: WritableSignal<string> = signal('');
+  toggleInput: WritableSignal<boolean> = signal(false);
   subscription: Subscription = new Subscription();
   registerForm!: FormGroup;
   private readonly authService = inject(AuthService);
@@ -39,8 +39,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          console.log(err);
-          this.errorMsg = err;
+          this.errorMsg.set(err);
         }
       })
     } else {
@@ -57,7 +56,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
   }
   toggle(): void {
-    this.toggleInput = !this.toggleInput;
+    this.toggleInput.update((prev) => !prev);
   }
   selectedLang() {
     if (localStorage.getItem('lang') === 'en') {

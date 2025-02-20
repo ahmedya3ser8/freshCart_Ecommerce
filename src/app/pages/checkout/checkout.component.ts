@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -14,9 +14,9 @@ import { ErrorMessageComponent } from "../../shared/components/ui/error-message/
   styleUrl: './checkout.component.scss'
 })
 export class CheckoutComponent implements OnInit, OnDestroy {
-  errorMsg: string = '';
-  currentId: string = '';
-  payment: string = '';
+  errorMsg: WritableSignal<string> = signal('');
+  currentId: WritableSignal<string> = signal('');
+  payment: WritableSignal<string> = signal('');
   subscriptions: Subscription[] = [];
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly cartService = inject(CartService);
@@ -32,18 +32,18 @@ export class CheckoutComponent implements OnInit, OnDestroy {
     });
     this.activatedRoute.queryParamMap.subscribe({
       next: (params) => {
-        this.payment = params.get('payment')!;
+        this.payment.set(params.get('payment')!);
       }
     });
     this.activatedRoute.paramMap.subscribe({
       next: (paramMap) => {
-        this.currentId = paramMap.get('id')!;
+        this.currentId.set(paramMap.get('id')!);
       }
     });
   }
   checkoutOnline(): void {
     if (this.checkoutForm.valid) {
-      this.subscriptions.push(this.cartService.checkoutOnline(this.currentId, this.checkoutForm.value).subscribe({
+      this.subscriptions.push(this.cartService.checkoutOnline(this.currentId(), this.checkoutForm.value).subscribe({
         next: (res) => {
           if (res.status === 'success') {
             this.checkoutForm.reset();
@@ -52,7 +52,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          this.errorMsg = err;
+          this.errorMsg.set(err);
         }
       }))
     } else {
@@ -61,7 +61,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
   }
   checkoutCash(): void {
     if (this.checkoutForm.valid) {
-      this.subscriptions.push(this.cartService.checkoutCash(this.currentId, this.checkoutForm.value).subscribe({
+      this.subscriptions.push(this.cartService.checkoutCash(this.currentId(), this.checkoutForm.value).subscribe({
         next: (res) => {
           if (res.status === 'success') {
             this.checkoutForm.reset();
@@ -70,7 +70,7 @@ export class CheckoutComponent implements OnInit, OnDestroy {
           }
         },
         error: (err) => {
-          this.errorMsg = err;
+          this.errorMsg.set(err);
         }
       }))
     } else {

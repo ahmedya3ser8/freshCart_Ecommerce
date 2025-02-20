@@ -1,4 +1,4 @@
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, signal, WritableSignal } from '@angular/core';
 import { ProductsService } from '../../core/services/products/products.service';
 import { IProduct } from '../../shared/interfaces/iproduct';
 import { ProductItemComponent } from "../../shared/components/ui/product-item/product-item.component";
@@ -14,26 +14,26 @@ import { Subscription } from 'rxjs';
   styleUrl: './products.component.scss'
 })
 export class ProductsComponent implements OnInit, OnDestroy {
-  products: IProduct[] = [];
-  subscription!: Subscription;
-  searchInput!: string;
-  page: number = 1;
-  limit: number = 10;
-  total!: number;
+  products: WritableSignal<IProduct[]> = signal([]);
+  subscription: Subscription = new Subscription();
+  searchInput: WritableSignal<string> = signal('');
+  page: WritableSignal<number> = signal(1);
+  limit: WritableSignal<number> = signal(10);
+  total: WritableSignal<number> = signal(0);
   private readonly productsService = inject(ProductsService);
   ngOnInit(): void {
     this.getAllProducts();
   }
   getAllProducts(): void {
-    this.subscription = this.productsService.getAllProducts(this.page, this.limit).subscribe({
+    this.subscription = this.productsService.getAllProducts(this.page(), this.limit()).subscribe({
       next: (res) => {
-        this.total = res.results;
-        this.products = res.data;
+        this.total.set(res.results);
+        this.products.set(res.data);
       }
     })
   }
   changePage(event: any) {
-    this.page = event;
+    this.page.set(event);
     this.getAllProducts();
   }
   ngOnDestroy(): void {

@@ -15,10 +15,10 @@ import { ICart } from '../../shared/interfaces/icart';
   styleUrl: './cart.component.scss'
 })
 export class CartComponent implements OnInit, OnDestroy {
-  cartProducts: ICart = <ICart>{};
+  cartProducts: WritableSignal<ICart | null> = signal(null);
   cartCounter: Signal<number> = computed(() => this.cartService.cartCount())
-  dicount: number = 10;
-  payment: string = 'online';
+  dicount: WritableSignal<number> = signal(10);
+  payment: WritableSignal<string> = signal('online');
   date: Date = new Date();
   subscriptions: Subscription[] = [];
   private readonly cartService = inject(CartService);
@@ -30,7 +30,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.cartService.getAllCartProducts().subscribe({
       next: (res) => {
         this.cartService.cartCount.set(res.numOfCartItems);
-        this.cartProducts = res.data;
+        this.cartProducts.set(res.data);
       }
     }))
   }
@@ -38,7 +38,7 @@ export class CartComponent implements OnInit, OnDestroy {
     this.subscriptions.push(this.cartService.updateCartProductQuantity(id, quantity).subscribe({
       next: (res) => {
         if (res.status === 'success') {
-          this.cartProducts = res.data;
+          this.cartProducts.set(res.data);
           this.toastrService.success('quantity updated successfully');
         }
       }
@@ -59,7 +59,7 @@ export class CartComponent implements OnInit, OnDestroy {
           next: (res) => {
             if (res.status === 'success') {
               this.cartService.cartCount.set(res.numOfCartItems);
-              this.cartProducts = res.data;
+              this.cartProducts.set(res.data);
               Swal.fire({
                 title: "Deleted!",
                 text: "Your product has been deleted.",
@@ -86,7 +86,7 @@ export class CartComponent implements OnInit, OnDestroy {
           next: (res) => {
             if (res.message === 'success') {
               this.cartService.cartCount.set(0);
-              this.cartProducts = {} as ICart;
+              this.cartProducts.set(null);
               Swal.fire({
                 title: "Deleted!",
                 text: "Your All Products has been deleted.",
@@ -100,13 +100,13 @@ export class CartComponent implements OnInit, OnDestroy {
   }
   paymentMethod(event: Event): void {
     let e = (event.target as HTMLSelectElement).value;
-    this.payment = e;
+    this.payment.set(e);
   }
   calculateDiscount() {
-    return ((this.cartProducts.totalCartPrice / 100) * this.dicount).toFixed(2);
+    return ((this.cartProducts()?.totalCartPrice ?? 0) / 100 * (this.dicount() ?? 0)).toFixed(2);
   }
   calculateTotal() {
-    return (this.cartProducts.totalCartPrice - (this.cartProducts.totalCartPrice / 100) * this.dicount).toFixed(2);
+    return ((this.cartProducts()?.totalCartPrice ?? 0) - ((this.cartProducts()?.totalCartPrice ?? 0 ) / 100) * this.dicount()).toFixed(2);
   }
   ngOnDestroy(): void {
     this.subscriptions.forEach((subscription) => subscription.unsubscribe());
