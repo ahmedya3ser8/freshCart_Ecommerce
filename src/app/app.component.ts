@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { FlowbiteService } from './core/services/flowbite/flowbite.service';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 
 @Component({
@@ -11,8 +10,4 @@ import { NgxSpinnerComponent } from 'ngx-spinner';
 })
 export class AppComponent {
   title = 'Ecommerce';
-  constructor(private flowbiteService: FlowbiteService) {}
-  ngOnInit(): void {
-    this.flowbiteService.loadFlowbite(flowbite => { });
-  }
 }

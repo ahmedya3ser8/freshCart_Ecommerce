@@ -13,6 +13,7 @@ import { WishlistService } from '../../core/services/wishlist/wishlist.service';
   styleUrl: './navbar.component.scss'
 })
 export class NavbarComponent implements OnInit {
+  isOpen: boolean = false;
   cartCounter: Signal<number> = computed(() => this.cartService.cartCount());
   wishlistCounter: Signal<number> = computed(() => this.wishlistService.wishlistCount());
   isLogin: InputSignal<boolean> = input(true);
@@ -40,5 +41,11 @@ export class NavbarComponent implements OnInit {
       const lang = localStorage.getItem('lang')!;
       return lang === 'en' ? true : false;
     }
+  }
+  toggle(): void {
+    this.isOpen = !this.isOpen;
+  }
+  closeMenu(): void {
+    this.isOpen = false;
   }
 }
